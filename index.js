@@ -1,12 +1,11 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Shape = require('./lib/Shape')
 const Square = require('./lib/Square');
 const Circle = require('./lib/Circle');
 const Triangle = require('./lib/Triangle');
 
 
-
+// creating an command prompt
 inquirer
     .prompt([
         {
@@ -31,8 +30,20 @@ inquirer
             name: 'shapeColor',
         },
     ])
+    // check and make user the user input is 1~3 charcters
     .then((data) => {
         console.log(data)
+        var userInput = "";
+        if (data.text.length > 0 && data.text.length < 4) {
+           
+            userInput = data.text;
+        } else {
+            
+            console.log("Invalid input. The text field can only contain 1 ~3 characters");
+            return;
+        }
+    
+    // check for user selection on the shapes
         let shape;
         if (data.shape == 'Square') {
             shape = new Square(data.text, data.textColor, data.shapeColor)
@@ -44,11 +55,11 @@ inquirer
             shape = new Circle(data.text, data.textColor, data.shapeColor)
         }
         console.log(shape);
+        // create an file call logo.svg
         fs.writeFile('logo.svg', shape.render(), (err) =>
-        err ? console.log(err) : console.log('success! Your SVG logo has been created')
+        err ? console.log(err) : console.log('success! Generated logo.svg')
         );
        
     }); 
 
     
-
